@@ -242,9 +242,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 731584437}
-        m_TargetAssemblyTypeName: GameRules, Assembly-CSharp
-        m_MethodName: BuyPizzaUpgrade
+      - m_Target: {fileID: 933057852}
+        m_TargetAssemblyTypeName: GameUI, Assembly-CSharp
+        m_MethodName: ClickBuyPizzaUpgrade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -869,9 +869,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 731584437}
-        m_TargetAssemblyTypeName: GameRules, Assembly-CSharp
-        m_MethodName: Buy1Ingridient
+      - m_Target: {fileID: 933057852}
+        m_TargetAssemblyTypeName: GameUI, Assembly-CSharp
+        m_MethodName: ClickBuy1Ingridient
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1876,9 +1876,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 731584437}
-        m_TargetAssemblyTypeName: GameRules, Assembly-CSharp
-        m_MethodName: BuyOvenUpgrade
+      - m_Target: {fileID: 933057852}
+        m_TargetAssemblyTypeName: GameUI, Assembly-CSharp
+        m_MethodName: ClickBuyOvenUpgrade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2009,9 +2009,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 731584437}
-        m_TargetAssemblyTypeName: GameRules, Assembly-CSharp
-        m_MethodName: Buy10Ingridients
+      - m_Target: {fileID: 933057852}
+        m_TargetAssemblyTypeName: GameUI, Assembly-CSharp
+        m_MethodName: ClickBuy10Ingridients
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3788,9 +3788,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 731584437}
-        m_TargetAssemblyTypeName: GameRules, Assembly-CSharp
-        m_MethodName: Buy5Ingridients
+      - m_Target: {fileID: 933057852}
+        m_TargetAssemblyTypeName: GameUI, Assembly-CSharp
+        m_MethodName: ClickBuy5Ingridients
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4581,9 +4581,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 731584437}
-        m_TargetAssemblyTypeName: GameRules, Assembly-CSharp
-        m_MethodName: StartNextDay
+      - m_Target: {fileID: 933057852}
+        m_TargetAssemblyTypeName: GameUI, Assembly-CSharp
+        m_MethodName: ClickStartNextDay
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5944,9 +5944,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 731584437}
-        m_TargetAssemblyTypeName: GameRules, Assembly-CSharp
-        m_MethodName: BuyMaxIngridients
+      - m_Target: {fileID: 933057852}
+        m_TargetAssemblyTypeName: GameUI, Assembly-CSharp
+        m_MethodName: ClickBuyMaxIngridients
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6346,9 +6346,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 731584437}
-        m_TargetAssemblyTypeName: GameRules, Assembly-CSharp
-        m_MethodName: BuyCustomerUpgrade
+      - m_Target: {fileID: 933057852}
+        m_TargetAssemblyTypeName: GameUI, Assembly-CSharp
+        m_MethodName: ClickBuyCustomerUpgrade
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

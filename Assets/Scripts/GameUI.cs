@@ -1,10 +1,22 @@
+//===================================================================================================
+// Nome: Matheus Pelegrini Bucater
+// Data: 18/10/2024
+//===================================================================================================
+
+//===================================================================================================
+// Bibliotecas
+//===================================================================================================
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
 {
+    //===============================================================================================
+    // Declaração de Variáveis
+    //===============================================================================================
     [SerializeField] private TMP_Text _dayText;
     [SerializeField] private TMP_Text _moneyText;
     [SerializeField] private TMP_Text _ingridientText;
@@ -32,12 +44,6 @@ public class GameUI : MonoBehaviour
     [SerializeField] private Button _customerButton;
     [SerializeField] private Button _pizzaButton;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        _dayText.text = "Dia 0";
-        _moneyText.text = "0 $";
-    }
 
     // Update is called once per frame
     void Update()
@@ -46,6 +52,9 @@ public class GameUI : MonoBehaviour
         DrawButton();
     }
 
+    //===============================================================================================
+    // Métodos
+    //===============================================================================================
     private void DrawText() {
         _dayText.text = "Dia " + GameRules.istance.gameData.Day;
         _moneyText.text = Math.Round(GameRules.istance.gameData.Money, 2) + " $";
@@ -82,5 +91,38 @@ public class GameUI : MonoBehaviour
         _ovenButton.interactable = GameRules.istance.gameData.Money >= Upgrade.GetCost(0, GameRules.istance.gameData.UpgradeLevels[0] + 1);
         _customerButton.interactable = GameRules.istance.gameData.Money >= Upgrade.GetCost(1, GameRules.istance.gameData.UpgradeLevels[1] + 1);
         _pizzaButton.interactable = GameRules.istance.gameData.Money >= Upgrade.GetCost(2, GameRules.istance.gameData.UpgradeLevels[2] + 1);
+    }
+
+    public void ClickBuy1Ingridient() {
+        GameRules.istance.gameData.Ingredients++;
+        GameRules.istance.gameData.Money -= GameRules.istance.gameData.MoneyCostPerIngredient;
+    }
+    public void ClickBuy5Ingridients() {
+        GameRules.istance.gameData.Ingredients += 5;
+        GameRules.istance.gameData.Money -= 5 * GameRules.istance.gameData.MoneyCostPerIngredient;
+    }
+    public void ClickBuy10Ingridients() {
+        GameRules.istance.gameData.Ingredients += 10;
+        GameRules.istance.gameData.Money -= 10 * GameRules.istance.gameData.MoneyCostPerIngredient;
+    }
+    public void ClickBuyMaxIngridients() {
+        int ingridientsCount = (int)GameRules.istance.gameData.Money / (int)GameRules.istance.gameData.MoneyCostPerIngredient;
+        GameRules.istance.gameData.Ingredients += ingridientsCount;
+        GameRules.istance.gameData.Money -= ingridientsCount * GameRules.istance.gameData.MoneyCostPerIngredient;
+    }
+    public void ClickBuyOvenUpgrade() {
+        GameRules.istance.gameData.UpgradeLevels[0]++;
+        GameRules.istance.gameData.Money -= Upgrade.GetCost(0, GameRules.istance.gameData.UpgradeLevels[0]);
+    }
+    public void ClickBuyCustomerUpgrade() {
+        GameRules.istance.gameData.UpgradeLevels[1]++;
+        GameRules.istance.gameData.Money -= Upgrade.GetCost(1, GameRules.istance.gameData.UpgradeLevels[1]);
+    }
+    public void ClickBuyPizzaUpgrade() {
+        GameRules.istance.gameData.UpgradeLevels[2]++;
+        GameRules.istance.gameData.Money -= Upgrade.GetCost(2, GameRules.istance.gameData.UpgradeLevels[2]);
+    }
+    public void ClickStartNextDay() {
+        SceneManager.LoadScene("Main Scene");
     }
 }
