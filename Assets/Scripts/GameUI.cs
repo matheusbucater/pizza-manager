@@ -94,33 +94,25 @@ public class GameUI : MonoBehaviour
     }
 
     public void ClickBuy1Ingridient() {
-        GameRules.istance.gameData.Ingredients++;
-        GameRules.istance.gameData.Money -= GameRules.istance.gameData.MoneyCostPerIngredient;
+        GameRules.istance.Buy1Ingridient();
     }
     public void ClickBuy5Ingridients() {
-        GameRules.istance.gameData.Ingredients += 5;
-        GameRules.istance.gameData.Money -= 5 * GameRules.istance.gameData.MoneyCostPerIngredient;
+        GameRules.istance.Buy5Ingridients();
     }
     public void ClickBuy10Ingridients() {
-        GameRules.istance.gameData.Ingredients += 10;
-        GameRules.istance.gameData.Money -= 10 * GameRules.istance.gameData.MoneyCostPerIngredient;
+        GameRules.istance.Buy10Ingridients();
     }
     public void ClickBuyMaxIngridients() {
-        int ingridientsCount = (int)GameRules.istance.gameData.Money / (int)GameRules.istance.gameData.MoneyCostPerIngredient;
-        GameRules.istance.gameData.Ingredients += ingridientsCount;
-        GameRules.istance.gameData.Money -= ingridientsCount * GameRules.istance.gameData.MoneyCostPerIngredient;
+        GameRules.istance.BuyMaxIngridients();
     }
     public void ClickBuyOvenUpgrade() {
-        GameRules.istance.gameData.UpgradeLevels[0]++;
-        GameRules.istance.gameData.Money -= Upgrade.GetCost(0, GameRules.istance.gameData.UpgradeLevels[0]);
+        GameRules.istance.BuyOvenUpgrade();
     }
     public void ClickBuyCustomerUpgrade() {
-        GameRules.istance.gameData.UpgradeLevels[1]++;
-        GameRules.istance.gameData.Money -= Upgrade.GetCost(1, GameRules.istance.gameData.UpgradeLevels[1]);
+        GameRules.istance.BuyCustomerUpgrade();
     }
     public void ClickBuyPizzaUpgrade() {
-        GameRules.istance.gameData.UpgradeLevels[2]++;
-        GameRules.istance.gameData.Money -= Upgrade.GetCost(2, GameRules.istance.gameData.UpgradeLevels[2]);
+        GameRules.istance.BuyPizzaUpgrade();
     }
     public void ClickStartNextDay() {
         SceneManager.LoadScene("Main Scene");
