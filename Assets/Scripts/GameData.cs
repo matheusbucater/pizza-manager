@@ -13,9 +13,9 @@ public class GameData
     private int    _ingredients;             // Número de ingredientes que o player possui
     private double _moneyCostPerIngredient;  // Preço do ingrediente
     private double _ingredientsCostPerPizza; // Número ingredientes necessários para fazer uma pizza
-    private double _customersPerHour;        // Número de clientes que visitam a pizzaria a cada hora
-    private double _pizzasPerHour;           // Número de pizzas que podem ser feitas a cada hora
-    private double _pizzaPrice;              // Preço de venda da pizza
+    // private double _customersPerHour;        // Número de clientes que visitam a pizzaria a cada hora
+    // private double _pizzasPerHour;           // Número de pizzas que podem ser feitas a cada hora
+    // private double _pizzaPrice;              // Preço de venda da pizza
 
     //===============================================================================================
     // Construtor
@@ -26,10 +26,10 @@ public class GameData
         int[] upgradeLevels, 
         int ingredients,
         double moneyCostPerIngredient,
-        double ingredientsCostPerPizza, 
-        double customersPerHour,
-        double pizzasPerHour,
-        double pizzaPrice
+        double ingredientsCostPerPizza
+        // double customersPerHour,
+        // double pizzasPerHour,
+        // double pizzaPrice
     ) {
 
         _day = day;
@@ -38,9 +38,9 @@ public class GameData
         _ingredients = ingredients;
         _moneyCostPerIngredient = moneyCostPerIngredient;
         _ingredientsCostPerPizza = ingredientsCostPerPizza;
-        _customersPerHour = customersPerHour;
-        _pizzasPerHour = pizzasPerHour;
-        _pizzaPrice = pizzaPrice;
+        // _customersPerHour = customersPerHour;
+        // _pizzasPerHour = pizzasPerHour;
+        // _pizzaPrice = pizzaPrice;
     }
 
     //===============================================================================================
@@ -70,16 +70,16 @@ public class GameData
         get => _ingredientsCostPerPizza;
         set => _ingredientsCostPerPizza = value;
     }
-    public double CustomersPerHour {
-        get => _customersPerHour;
-        set => _customersPerHour = value;
-    }
-    public double PizzasPerHour {
-        get => _pizzasPerHour;
-        set => _pizzasPerHour = value;
-    }
-    public double PizzaPrice {
-        get => _pizzaPrice;
-        set => _pizzaPrice = value;
-    }
+    // public double CustomersPerHour {
+    //     get => _customersPerHour;
+    //     set => _customersPerHour = value;
+    // }
+    // public double PizzasPerHour {
+    //     get => _pizzasPerHour;
+    //     set => _pizzasPerHour = value;
+    // }
+    // public double PizzaPrice {
+    //     get => _pizzaPrice;
+    //     set => _pizzaPrice = value;
+    // }
 }

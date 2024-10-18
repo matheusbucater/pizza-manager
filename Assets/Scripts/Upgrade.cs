@@ -6,45 +6,53 @@
 //===================================================================================================
 // Bibliotecas
 //===================================================================================================
+using System;
 using System.Collections.Generic;
 
-public class Upgrade
+public static class Upgrade
 {
     //===============================================================================================
     // Declaração de Variáveis
     //===============================================================================================
-    private static readonly double[] _ovenUpgrades = {0, };
-    private static readonly double[] _ovenUpgradesCost = {0, };
-    private static readonly double[] _customerUpgrades = {0, };
-    private static readonly double[] _customerUpgradesCost = {0, };
-    private static readonly double[] _pizzaUpgrades = {0, };
-    private static readonly double[] _pizzaUpgradesCost = {0, };
 
-    private static readonly Dictionary<int,double[]> _upgrades = new() {
-        [0] = _ovenUpgrades,
-        [1] = _customerUpgrades,
-        [2] = _pizzaUpgrades
-    };
-    private static readonly Dictionary<int,double[]> _upgradesCost = new() {
-        [0] = _ovenUpgradesCost,
-        [1] = _customerUpgradesCost,
-        [2] = _pizzaUpgradesCost
-    };
 
     //===============================================================================================
     // Métodos
     //===============================================================================================
-    public int GetMaxNumOfUpgrades(int upgradeIndex) {
-        return _upgrades[upgradeIndex].Length - 1;
+    private static double OvenUpgrade(int levelIndex) {
+        return Math.Round(3.75 * (levelIndex + 1), 2);
     }
-    public bool IsUpgradeMax(int upgradeIndex, int levelIndex) {
-        return levelIndex == GetMaxNumOfUpgrades(upgradeIndex);
+    private static double OvenCost(int levelIndex) {
+        return Math.Round(0.75 * Math.Pow(1.75, levelIndex), 2);
     }
-    public double GetUpgradeStat(int upgradeIndex, int levelIndex) {
-        return _upgrades[upgradeIndex][levelIndex];
+    private static double CustomerUpgrade(int levelIndex) {
+        return Math.Round(2.5 * (levelIndex + 1), 2);
     }
-    public double GetUpgradeCost(int upgradeIndex, int levelIndex) {
-        return _upgradesCost[upgradeIndex][levelIndex];
+    private static double CustomerCost(int levelIndex) {
+        return Math.Round(0.5 * Math.Pow(1.5, levelIndex), 2);
     }
-
+    private static double PizzaUpgrade(int levelIndex) {
+        return Math.Round(9 * Math.Pow(1.07,levelIndex), 2);
+    }
+    private static double PizzaCost(int levelIndex) {
+        return Math.Round(18 * Math.Pow(1.07,levelIndex), 2);
+    }
+    public static double GetUpgrade(int upgradeIndex, int levelIndex) {
+        return upgradeIndex switch
+        {
+            0 => OvenUpgrade(levelIndex),
+            1 => CustomerUpgrade(levelIndex),
+            2 => PizzaUpgrade(levelIndex),
+            _ => throw new NotImplementedException(),
+        };
+    }
+    public static double GetCost(int upgradeIndex, int levelIndex) {
+        return upgradeIndex switch
+        {
+            0 => OvenCost(levelIndex),
+            1 => CustomerCost(levelIndex),
+            2 => PizzaCost(levelIndex),
+            _ => throw new NotImplementedException(),
+        };
+    }
 }
