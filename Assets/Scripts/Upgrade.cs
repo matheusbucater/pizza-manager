@@ -15,12 +15,12 @@ public static class Upgrade
     //===============================================================================================
     private const double _ovenUpgradeBase = 0.75;
     private const double _ovenUpgradeRate = 1.5;
-    private const double _ovenCostBase = 20;
+    private const double _ovenCostBase = 30;
     private const double _ovenCostRate = 1.02;
 
-    private const double _customerUpgradeBase = 0;
+    private const double _customerUpgradeBase = 0.625;
     private const double _customerUpgradeRate = 1.1;
-    private const double _customerCostBase = 30;
+    private const double _customerCostBase = 35;
     private const double _customerCostRate = 1.01;
 
     private const double _pizzaUpgradeBase = 9;
