@@ -55,8 +55,12 @@ public class GameRules : MonoBehaviour
         double _pizzaProductionPerHour = Math.Min(GameData.GetOvenUpgrade(), GameData.GetCustomerUpgrade());
         return (int) (hours * _pizzaProductionPerHour); 
     }
-    public static void PizzaProduction(double hours) {
-        GameData.money += SoldPizzas(hours) * GameData.GetPizzaUpgrade();
-        GameData.ingredients -= SoldPizzas(hours) * (int)GameData.ingredientsCostPerPizza;
+    public static void DayProduction() {
+        int _pizzas = Math.Min(
+            (int) (GameData.ingredients / GameData.ingredientsCostPerPizza),
+            SoldPizzas(8)
+        );
+        GameData.money += _pizzas * GameData.GetPizzaUpgrade();
+        GameData.ingredients -= _pizzas * (int)GameData.ingredientsCostPerPizza;
     }
 }

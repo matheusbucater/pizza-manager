@@ -53,7 +53,7 @@ public class GameVisuals : MonoBehaviour
     {
         _elapsedTime = Math.Abs(Time.time - _startTime);
         if (_elapsedTime / 60 >= 8 || GameRules.UsedIngridients(_elapsedTime / 60) >= GameData.ingredients) {
-            GameRules.PizzaProduction(8);
+            GameRules.DayProduction();
             SceneManager.LoadScene("UI Scene");
         }
         Time.timeScale = _speed * _baseSpeed;
@@ -71,7 +71,7 @@ public class GameVisuals : MonoBehaviour
 
         _dayText.text = "Dia " + GameData.day;
         _hourText.text = _timeInGame.ToString(@"hh\:mm");
-        _moneyText.text = GameData.money + " $";
+        _moneyText.text = Math.Round(GameData.money, 2) + " $";
         _ingridientText.text = "- " + (GameData.ingredients - GameRules.UsedIngridients(elapsedTime / 60)) + " Ingredientes restantes";
         _pizzaText.text = "- " + GameRules.SoldPizzas(elapsedTime / 60) + " pizzas vendidas";
     }
@@ -106,7 +106,7 @@ public class GameVisuals : MonoBehaviour
         _speed = 5;
     }
     public void ClickSkip() {
-        GameRules.PizzaProduction(8);
+        GameRules.DayProduction();
         SceneManager.LoadScene("UI Scene");
     }
 }
