@@ -1,6 +1,6 @@
 //===================================================================================================
-// Nome: Matheus Pelegrini Bucater
-// Data: 18/10/2024
+// Autor(es):
+// - Matheus Pelegrini Bucater
 //===================================================================================================
 
 //===================================================================================================
@@ -9,7 +9,6 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
@@ -36,13 +35,13 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TMP_Text _pizzaNextUpgradeText;
     [SerializeField] private TMP_Text _nextDayText;
 
-    [SerializeField] private Button _plus1IngridientButton;
-    [SerializeField] private Button _plus5IngridientButton;
-    [SerializeField] private Button _plus10IngridientButton;
-    [SerializeField] private Button _maxIngridientButton;
-    [SerializeField] private Button _ovenButton;
-    [SerializeField] private Button _customerButton;
-    [SerializeField] private Button _pizzaButton;
+    [SerializeField] private Button   _plus1IngridientButton;
+    [SerializeField] private Button   _plus5IngridientButton;
+    [SerializeField] private Button   _plus10IngridientButton;
+    [SerializeField] private Button   _maxIngridientButton;
+    [SerializeField] private Button   _ovenButton;
+    [SerializeField] private Button   _customerButton;
+    [SerializeField] private Button   _pizzaButton;
 
 
     // Update is called once per frame
@@ -56,65 +55,65 @@ public class GameUI : MonoBehaviour
     // Métodos
     //===============================================================================================
     private void DrawText() {
-        _dayText.text = "Dia " + GameRules.istance.gameData.Day;
-        _moneyText.text = Math.Round(GameRules.istance.gameData.Money, 2) + " $";
+        _dayText.text = "Dia " + GameData.day;
+        _moneyText.text = Math.Round(GameData.money, 2) + " $";
 
-        _ingridientText.text = "Você possui " + GameRules.istance.gameData.Ingredients + " Ingrediente(s)"; 
-        _ingridientPerPizzaText.text = "* cada pizza leva " + GameRules.istance.gameData.IngredientsCostPerPizza + " ingrediente(s) para ser feita";
+        _ingridientText.text = "Você possui " + GameData.ingredients + " Ingrediente(s)";
+        _ingridientPerPizzaText.text = "* cada pizza leva " + GameData.ingredientsCostPerPizza + " ingrediente(s) para ser feita";
 
-        _ingridientCostText.text = "Custo: " + GameRules.istance.gameData.MoneyCostPerIngredient + " $/Ingrediente";
+        _ingridientCostText.text = "Custo: " + GameData.moneyCostPerIngredient + " $/Ingrediente";
 
-        _ovenLevelText.text = "Level: " + GameRules.istance.gameData.UpgradeLevels[0];
-        _ovenUpgradeText.text = "- " + Upgrade.GetUpgrade(0, GameRules.istance.gameData.UpgradeLevels[0]) + " pizzas/hora";
-        _ovenCostText.text = Upgrade.GetCost(0, GameRules.istance.gameData.UpgradeLevels[0] + 1) +  " $";
-        _ovenNextUpgradeText.text = "(" + Upgrade.GetUpgrade(0, GameRules.istance.gameData.UpgradeLevels[0] + 1) + " pizzas/hora)";
+        _ovenLevelText.text = "Level: " + GameData.ovenLevel;
+        _ovenUpgradeText.text = "- " + GameData.GetOvenUpgrade() + " pizzas/hora";
+        _ovenCostText.text = GameData.GetOvenCost(1) + " $";
+        _ovenNextUpgradeText.text = "(" + GameData.GetOvenUpgrade(1) + " pizzas/hora)";
 
-        _customerLevelText.text = "Level: " + GameRules.istance.gameData.UpgradeLevels[1];
-        _customerUpgradeText.text = "- " + Upgrade.GetUpgrade(1, GameRules.istance.gameData.UpgradeLevels[1]) + " clientes/hora";
-        _customerCostText.text = Upgrade.GetCost(1, GameRules.istance.gameData.UpgradeLevels[1] + 1) +  " $";
-        _customerNextUpgradeText.text = "(" + Upgrade.GetUpgrade(1, GameRules.istance.gameData.UpgradeLevels[1] + 1) + " clientes/hora)";
+        _customerLevelText.text = "Level: " + GameData.customerLevel;
+        _customerUpgradeText.text = "- " + GameData.GetCustomerUpgrade() + " clientes/hora";
+        _customerCostText.text = GameData.GetCustomerCost(1) + " $";
+        _customerNextUpgradeText.text = "(" + GameData.GetCustomerUpgrade(1) + " clientes/hora)";
 
-        _pizzaLevelText.text = "Level: " + GameRules.istance.gameData.UpgradeLevels[2];
-        _pizzaUpgradeText.text = "- " + Upgrade.GetUpgrade(2, GameRules.istance.gameData.UpgradeLevels[2]) + " $/pizza";
-        _pizzaCostText.text = Upgrade.GetCost(2, GameRules.istance.gameData.UpgradeLevels[2] + 1) +  " $";
-        _pizzaNextUpgradeText.text = "(" + Upgrade.GetUpgrade(2, GameRules.istance.gameData.UpgradeLevels[2] + 1) + " $/pizza)";
+        _pizzaLevelText.text = "Level: " + GameData.pizzaLevel;
+        _pizzaUpgradeText.text = "- " + GameData.GetPizzaUpgrade() + " $/pizza";
+        _pizzaCostText.text = GameData.GetPizzaCost(1) + " $";
+        _pizzaNextUpgradeText.text = "(" + GameData.GetPizzaUpgrade(1) + " $/pizza)";
 
-        _nextDayText.text = "Começar Dia " + (GameRules.istance.gameData.Day + 1);
+        _nextDayText.text = "Começar Dia " + (GameData.day + 1);
     }
 
     private void DrawButton() {
-        _plus1IngridientButton.interactable = GameRules.istance.gameData.Money >= GameRules.istance.gameData.MoneyCostPerIngredient;
-        _plus5IngridientButton.interactable = GameRules.istance.gameData.Money >= 5 * GameRules.istance.gameData.MoneyCostPerIngredient;
-        _plus10IngridientButton.interactable = GameRules.istance.gameData.Money >= 10 * GameRules.istance.gameData.MoneyCostPerIngredient;
-        _maxIngridientButton.interactable = GameRules.istance.gameData.Money >= GameRules.istance.gameData.MoneyCostPerIngredient;
+        _plus1IngridientButton.interactable = GameData.money >= GameData.moneyCostPerIngredient;
+        _plus5IngridientButton.interactable = GameData.money >= 5 * GameData.moneyCostPerIngredient;
+        _plus10IngridientButton.interactable = GameData.money >= 10 * GameData.moneyCostPerIngredient;
+        _maxIngridientButton.interactable = GameData.money >= GameData.moneyCostPerIngredient;
 
-        _ovenButton.interactable = GameRules.istance.gameData.Money >= Upgrade.GetCost(0, GameRules.istance.gameData.UpgradeLevels[0] + 1);
-        _customerButton.interactable = GameRules.istance.gameData.Money >= Upgrade.GetCost(1, GameRules.istance.gameData.UpgradeLevels[1] + 1);
-        _pizzaButton.interactable = GameRules.istance.gameData.Money >= Upgrade.GetCost(2, GameRules.istance.gameData.UpgradeLevels[2] + 1);
+        _ovenButton.interactable = GameData.money >= GameData.GetOvenCost(1);
+        _customerButton.interactable = GameData.money >= GameData.GetCustomerCost(1);
+        _pizzaButton.interactable = GameData.money >= GameData.GetPizzaCost(1);
     }
 
     public void ClickBuy1Ingridient() {
-        GameRules.istance.Buy1Ingridient();
+        GameRules.Buy1Ingridient();
     }
     public void ClickBuy5Ingridients() {
-        GameRules.istance.Buy5Ingridients();
+        GameRules.Buy5Ingridients();
     }
     public void ClickBuy10Ingridients() {
-        GameRules.istance.Buy10Ingridients();
+        GameRules.Buy10Ingridients();
     }
     public void ClickBuyMaxIngridients() {
-        GameRules.istance.BuyMaxIngridients();
+        GameRules.BuyMaxIngridients();
     }
     public void ClickBuyOvenUpgrade() {
-        GameRules.istance.BuyOvenUpgrade();
+        GameRules.BuyOvenUpgrade();
     }
     public void ClickBuyCustomerUpgrade() {
-        GameRules.istance.BuyCustomerUpgrade();
+        GameRules.BuyCustomerUpgrade();
     }
     public void ClickBuyPizzaUpgrade() {
-        GameRules.istance.BuyPizzaUpgrade();
+        GameRules.BuyPizzaUpgrade();
     }
     public void ClickStartNextDay() {
-        SceneManager.LoadScene("Main Scene");
+        GameRules.StartNextDay();
     }
 }

@@ -1,64 +1,64 @@
-//===================================================================================================
-// Nome: Matheus Pelegrini Bucater
-// Data: 17/10/2024
-//===================================================================================================
+//===================================================================================================================
+// Autor(es):
+// - Matheus Pelegrini Bucater
+//===================================================================================================================
+
+//===================================================================================================================
+// Bibliotecas
+//===================================================================================================================
+using System;
+
 public class GameData
 {
-    //===============================================================================================
+    //===============================================================================================================
+    // Declaração de Constantes
+    //===============================================================================================================  
+    private const double _ovenUpgradeBase        = 0.75;
+    private const double _ovenUpgradeRate        = 1.5;
+    private const double _ovenCostBase           = 30;
+    private const double _ovenCostRate           = 1.02;
+
+    private const double _customerUpgradeBase    = 0.625;
+    private const double _customerUpgradeRate    = 1.1;
+    private const double _customerCostBase       = 35;
+    private const double _customerCostRate       = 1.01;
+
+    private const double _pizzaUpgradeBase       = 9;
+    private const double _pizzaUpgradeRate       = 15;
+    private const double _pizzaCostBase          = 40;
+    private const double _pizzaCostRate          = 1.11;
+
+    //===============================================================================================================
     // Declaração de Variáveis
-    //===============================================================================================
-    private int    _day;                     // Contador de dias
-    private double _money;                   // Quantidade de dinheiro que o player possui
-    private int[]  _upgradeLevels;           // Level de cada upgrade do player
-    private int    _ingredients;             // Número de ingredientes que o player possui
-    private double _moneyCostPerIngredient;  // Preço do ingrediente
-    private double _ingredientsCostPerPizza; // Número ingredientes necessários para fazer uma pizza
+    //===============================================================================================================  
+    public static int    day                     = 0;         // Contador de dias
+    public static double money                   = 30.0;      // Quantidade de dinheiro que o player possui
+    public static int    ovenLevel               = 0;         // Level do Upgrade de forno
+    public static int    customerLevel           = 0;         // Level do Upgrade de cliente
+    public static int    pizzaLevel              = 0;         // Level do Upgrade de pizza
+    public static int    ingredients             = 0;         // Número de ingredientes que o player possui
+    public static double moneyCostPerIngredient  = 2.0;       // Preço do ingrediente
+    public static double ingredientsCostPerPizza = 3.0;       // Número ingredientes necessários para fazer uma pizza
 
-    //===============================================================================================
-    // Construtor
-    //===============================================================================================
-    public GameData(
-        int day, 
-        double money, 
-        int[] upgradeLevels, 
-        int ingredients,
-        double moneyCostPerIngredient,
-        double ingredientsCostPerPizza
-    ) {
-
-        _day = day;
-        _money = money;
-        _upgradeLevels = upgradeLevels;
-        _ingredients = ingredients;
-        _moneyCostPerIngredient = moneyCostPerIngredient;
-        _ingredientsCostPerPizza = ingredientsCostPerPizza;
+    //===============================================================================================================
+    // Métodos
+    //===============================================================================================================
+    public static double GetOvenUpgrade(int offsetLevel = 0) {
+        return Math.Round(_ovenUpgradeBase + (_ovenUpgradeRate * (ovenLevel + offsetLevel)), 2);
     }
-
-    //===============================================================================================
-    // Getters e Setters
-    //===============================================================================================
-    public int Day {
-        get => _day;
-        set => _day = value;
+    public static double GetOvenCost(int offsetLevel = 0) {
+        return Math.Round(_ovenCostBase * Math.Pow(_ovenCostRate, ovenLevel + offsetLevel), 2);
     }
-    public double Money {
-        get => _money;
-        set => _money = value;
+    public static double GetCustomerUpgrade(int offsetLevel = 0) {
+        return Math.Round(_customerUpgradeBase + ( _customerUpgradeRate * (customerLevel + offsetLevel)), 2);
     }
-    public int[] UpgradeLevels {
-        get => _upgradeLevels;
-        set => _upgradeLevels = value;
+    public static double GetCustomerCost(int offsetLevel = 0) {
+        return Math.Round(_customerCostBase * Math.Pow(_customerCostRate, customerLevel + offsetLevel), 2);
     }
-    public int Ingredients {
-        get => _ingredients;
-        set => _ingredients = value;
+    public static double GetPizzaUpgrade(int offsetLevel = 0) {
+        return Math.Round(_pizzaUpgradeBase + (_pizzaUpgradeRate * (pizzaLevel + offsetLevel)), 2);
     }
-    public double MoneyCostPerIngredient {
-        get => _moneyCostPerIngredient;
-        set => _moneyCostPerIngredient = value;
-    }
-    public double IngredientsCostPerPizza {
-        get => _ingredientsCostPerPizza;
-        set => _ingredientsCostPerPizza = value;
+    public static double GetPizzaCost(int offsetLevel = 0) {
+        return Math.Round(_pizzaCostBase * Math.Pow(_pizzaCostRate, pizzaLevel + offsetLevel), 2);
     }
 }
