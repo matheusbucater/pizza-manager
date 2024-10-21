@@ -6,24 +6,12 @@
 //===================================================================================================
 // Bibliotecas
 //===================================================================================================
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameRules : MonoBehaviour
 {
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     //===============================================================================================
     // Métodos
     //===============================================================================================
@@ -60,12 +48,15 @@ public class GameRules : MonoBehaviour
         GameData.day++;
         SceneManager.LoadScene("Main Scene");
     }
-    public void PizzaProduction(double hours) {
-        // int maxPizzaCount = (int)(gameData.Ingredients / gameData.IngredientsCostPerPizza);
-        // int pizzaCount =  (int)(hours * Math.Min(Upgrade.GetUpgrade(0, gameData.UpgradeLevels[0]), Upgrade.GetUpgrade(1, gameData.UpgradeLevels[1])));
-        // int actualPizzaCount = Math.Min(maxPizzaCount, pizzaCount);
-        // gameData.Money += actualPizzaCount * Upgrade.GetUpgrade(2, gameData.UpgradeLevels[2]);
-        // gameData.Ingredients -= actualPizzaCount * (int)gameData.IngredientsCostPerPizza;
-        // gameData.Day++;
+    public static int UsedIngridients(double hours) {
+        return (int) (SoldPizzas(hours) * GameData.ingredientsCostPerPizza);
+    }
+    public static int SoldPizzas(double hours) {
+        double _pizzaProductionPerHour = Math.Min(GameData.GetOvenUpgrade(), GameData.GetCustomerUpgrade());
+        return (int) (hours * _pizzaProductionPerHour); 
+    }
+    public static void PizzaProduction(double hours) {
+        GameData.money += SoldPizzas(hours) * GameData.GetPizzaUpgrade();
+        GameData.ingredients -= SoldPizzas(hours) * (int)GameData.ingredientsCostPerPizza;
     }
 }
