@@ -22,6 +22,9 @@ public class GameVisuals : MonoBehaviour
     //===============================================================================================
     // Declaração de Variáveis
     //===============================================================================================
+    private int     _soldPizzas;
+    private float   _pizzaWait;
+    private float   _customerWait;
     private float   _elapsedTime;
     private float   _startTime;
     private float   _speed;
@@ -48,32 +51,49 @@ public class GameVisuals : MonoBehaviour
 
         _blue = new Color32(26, 0, 132, 255);
         _green = new Color32(27, 141, 0, 255);
+
+        _pizzaWait = (float) (60 / GameData.GetOvenUpgrade());
+        _customerWait = (float) (60 / GameData.GetCustomerUpgrade());
+
+        _soldPizzas = 0;
     }
     void Update()
     {
         _elapsedTime = Math.Abs(Time.time - _startTime);
-        if (_elapsedTime / 60 >= 8 || GameRules.UsedIngridients(_elapsedTime / 60) >= GameData.ingredients) {
-            GameRules.DayProduction();
+        if (_elapsedTime / 60 > 8 || GameData.ingredients < GameData.ingredientsCostPerPizza) {
             SceneManager.LoadScene("UI Scene");
         }
+
+        if (_pizzaWait >= 0)
+            _pizzaWait -= Time.deltaTime;
+        if (_customerWait >= 0)
+            _customerWait -= Time.deltaTime;
+
+        if (_pizzaWait <= 0 && _customerWait <= 0) {
+            GameRules.BakePizza();
+            _soldPizzas++;
+            _pizzaWait = (float) (60 / GameData.GetOvenUpgrade());
+            _customerWait = (float) (60 / GameData.GetCustomerUpgrade());
+        }
+
         Time.timeScale = _speed * _baseSpeed;
-        DrawHUD(_elapsedTime);
+        DrawHUD();
     }
 
-    private void DrawHUD(float elapsedTime) {
-        DrawText(elapsedTime);
+    private void DrawHUD() {
+        DrawText();
         DrawButton();
     }
 
-    private void DrawText(float elapsedTime) {
+    private void DrawText() {
         TimeSpan _timeInGame = TimeSpan.FromHours(8);
-        _timeInGame += TimeSpan.FromMinutes(elapsedTime);
+        _timeInGame += TimeSpan.FromMinutes(_elapsedTime);
 
         _dayText.text = "Dia " + GameData.day;
         _hourText.text = _timeInGame.ToString(@"hh\:mm");
         _moneyText.text = Math.Round(GameData.money, 2) + " $";
-        _ingridientText.text = "- " + (GameData.ingredients - GameRules.UsedIngridients(elapsedTime / 60)) + " Ingredientes restantes";
-        _pizzaText.text = "- " + GameRules.SoldPizzas(elapsedTime / 60) + " pizzas vendidas";
+        _ingridientText.text = "- " + GameData.ingredients + " Ingredientes restantes";
+        _pizzaText.text = "- " + _soldPizzas + " pizzas vendidas";
     }
     private void DrawButton() {
         switch (_speed)
@@ -106,7 +126,7 @@ public class GameVisuals : MonoBehaviour
         _speed = 5;
     }
     public void ClickSkip() {
-        GameRules.DayProduction();
+        GameRules.BakeBatch(8 - (_elapsedTime / 60));
         SceneManager.LoadScene("UI Scene");
     }
 }
