@@ -31,14 +31,15 @@ public class GameVisuals : MonoBehaviour
     private Color32 _green;
     private Color32 _blue;
 
-    [SerializeField] private TMP_Text _dayText;
-    [SerializeField] private TMP_Text _hourText;
-    [SerializeField] private TMP_Text _moneyText;
-    [SerializeField] private TMP_Text _ingridientText;
-    [SerializeField] private TMP_Text _pizzaText;
-    [SerializeField] private Button   _speed1X;
-    [SerializeField] private Button   _speed2X;
-    [SerializeField] private Button   _speed5X;
+    [SerializeField] private TMP_Text    _dayText;
+    [SerializeField] private TMP_Text    _hourText;
+    [SerializeField] private TMP_Text    _moneyText;
+    [SerializeField] private TMP_Text    _ingridientText;
+    [SerializeField] private TMP_Text    _pizzaText;
+    [SerializeField] private Button      _speed1X;
+    [SerializeField] private Button      _speed2X;
+    [SerializeField] private Button      _speed5X;
+    [SerializeField] private AudioSource _pizzaSoldSound;
 
     //===============================================================================================
     // Métodos
@@ -72,6 +73,7 @@ public class GameVisuals : MonoBehaviour
         if (_pizzaWait <= 0 && _customerWait <= 0) {
             GameRules.BakePizza();
             _soldPizzas++;
+            PlaySound();
             _pizzaWait = (float) (60 / GameData.GetOvenUpgrade());
             _customerWait = (float) (60 / GameData.GetCustomerUpgrade());
         }
@@ -114,6 +116,9 @@ public class GameVisuals : MonoBehaviour
                 _speed5X.image.color = _blue;
             break;
         }
+    }
+    private void PlaySound() {
+        _pizzaSoldSound.Play();
     }
 
     public void ClickSpeed1X() {

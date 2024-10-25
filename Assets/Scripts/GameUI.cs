@@ -7,6 +7,7 @@
 // Bibliotecas
 //===================================================================================================
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,33 +17,36 @@ public class GameUI : MonoBehaviour
     //===============================================================================================
     // Declaração de Variáveis
     //===============================================================================================
-    [SerializeField] private TMP_Text _dayText;
-    [SerializeField] private TMP_Text _moneyText;
-    [SerializeField] private TMP_Text _ingridientText;
-    [SerializeField] private TMP_Text _ingridientPerPizzaText;
-    [SerializeField] private TMP_Text _ingridientCostText;
-    [SerializeField] private TMP_Text _ovenLevelText;
-    [SerializeField] private TMP_Text _ovenUpgradeText;
-    [SerializeField] private TMP_Text _ovenCostText;
-    [SerializeField] private TMP_Text _ovenNextUpgradeText;
-    [SerializeField] private TMP_Text _customerLevelText;
-    [SerializeField] private TMP_Text _customerUpgradeText;
-    [SerializeField] private TMP_Text _customerCostText;
-    [SerializeField] private TMP_Text _customerNextUpgradeText;
-    [SerializeField] private TMP_Text _pizzaLevelText;
-    [SerializeField] private TMP_Text _pizzaUpgradeText;
-    [SerializeField] private TMP_Text _pizzaCostText;
-    [SerializeField] private TMP_Text _pizzaNextUpgradeText;
-    [SerializeField] private TMP_Text _nextDayText;
+    [SerializeField] private TMP_Text     _dayText;
+    [SerializeField] private TMP_Text     _moneyText;
+    [SerializeField] private TMP_Text     _ingridientText;
+    [SerializeField] private TMP_Text     _ingridientPerPizzaText;
+    [SerializeField] private TMP_Text     _ingridientCostText;
+    [SerializeField] private TMP_Text     _ovenLevelText;
+    [SerializeField] private TMP_Text     _ovenUpgradeText;
+    [SerializeField] private TMP_Text     _ovenCostText;
+    [SerializeField] private TMP_Text     _ovenNextUpgradeText;
+    [SerializeField] private TMP_Text     _customerLevelText;
+    [SerializeField] private TMP_Text     _customerUpgradeText;
+    [SerializeField] private TMP_Text     _customerCostText;
+    [SerializeField] private TMP_Text     _customerNextUpgradeText;
+    [SerializeField] private TMP_Text     _pizzaLevelText;
+    [SerializeField] private TMP_Text     _pizzaUpgradeText;
+    [SerializeField] private TMP_Text     _pizzaCostText;
+    [SerializeField] private TMP_Text     _pizzaNextUpgradeText;
+    [SerializeField] private TMP_Text     _nextDayText;
 
-    [SerializeField] private Button   _plus1IngridientButton;
-    [SerializeField] private Button   _plus5IngridientButton;
-    [SerializeField] private Button   _plus10IngridientButton;
-    [SerializeField] private Button   _maxIngridientButton;
-    [SerializeField] private Button   _ovenButton;
-    [SerializeField] private Button   _customerButton;
-    [SerializeField] private Button   _pizzaButton;
+    [SerializeField] private Button       _plus1IngridientButton;
+    [SerializeField] private Button       _plus5IngridientButton;
+    [SerializeField] private Button       _plus10IngridientButton;
+    [SerializeField] private Button       _maxIngridientButton;
+    [SerializeField] private Button       _ovenButton;
+    [SerializeField] private Button       _customerButton;
+    [SerializeField] private Button       _pizzaButton;
 
+    [SerializeField] private AudioSource _buyIngridientSound;
+    [SerializeField] private AudioSource _buyUpgradeSound;
+    [SerializeField] private AudioSource _startNextDaySound;
 
     // Update is called once per frame
     void Update()
@@ -94,26 +98,41 @@ public class GameUI : MonoBehaviour
 
     public void ClickBuy1Ingridient() {
         GameRules.Buy1Ingridient();
+        _buyIngridientSound.Play();
     }
     public void ClickBuy5Ingridients() {
         GameRules.Buy5Ingridients();
+        _buyIngridientSound.Play();
     }
     public void ClickBuy10Ingridients() {
         GameRules.Buy10Ingridients();
+        _buyIngridientSound.Play();
     }
     public void ClickBuyMaxIngridients() {
         GameRules.BuyMaxIngridients();
+        _buyIngridientSound.Play();
     }
     public void ClickBuyOvenUpgrade() {
         GameRules.BuyOvenUpgrade();
+        _buyUpgradeSound.Play();
     }
     public void ClickBuyCustomerUpgrade() {
         GameRules.BuyCustomerUpgrade();
+        _buyUpgradeSound.Play();
     }
     public void ClickBuyPizzaUpgrade() {
         GameRules.BuyPizzaUpgrade();
+        _buyUpgradeSound.Play();
     }
     public void ClickStartNextDay() {
+        _startNextDaySound.Play();
+        StartCoroutine(WaitForStartNextDaySound());
+    }
+
+    private IEnumerator WaitForStartNextDaySound() {
+        while (_startNextDaySound.isPlaying) {
+            yield return null;
+        }
         GameRules.StartNextDay();
     }
 }
