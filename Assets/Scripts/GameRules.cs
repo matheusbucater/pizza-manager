@@ -48,19 +48,24 @@ public class GameRules : MonoBehaviour
         GameData.day++;
         SceneManager.LoadScene("Main Scene");
     }
-    public static int UsedIngridients(double hours) {
-        return (int) (SoldPizzas(hours) * GameData.ingredientsCostPerPizza);
+    public static void BakePizza() {
+        GameData.money += GameData.GetPizzaUpgrade();
+        GameData.ingredients -= (int) GameData.ingredientsCostPerPizza;
     }
-    public static int SoldPizzas(double hours) {
-        double _pizzaProductionPerHour = Math.Min(GameData.GetOvenUpgrade(), GameData.GetCustomerUpgrade());
-        return (int) (hours * _pizzaProductionPerHour); 
-    }
-    public static void DayProduction() {
-        int _pizzas = Math.Min(
-            (int) (GameData.ingredients / GameData.ingredientsCostPerPizza),
-            SoldPizzas(8)
+    public static void BakeBatch(double hours) {
+        double _maxPizzaProductionPerHour = Math.Min(
+            GameData.GetOvenUpgrade(),
+            GameData.GetCustomerUpgrade()
         );
-        GameData.money += _pizzas * GameData.GetPizzaUpgrade();
-        GameData.ingredients -= _pizzas * (int)GameData.ingredientsCostPerPizza;
+        double _maxPizzaByRemainigIngridients =
+            (int) (GameData.ingredients / GameData.ingredientsCostPerPizza);
+
+        int _totalPizzas = Math.Min(
+            (int) (hours * _maxPizzaProductionPerHour),
+            (int) _maxPizzaByRemainigIngridients
+        );
+
+        GameData.money += _totalPizzas * GameData.GetPizzaUpgrade();
+        GameData.ingredients -= _totalPizzas * (int) GameData.ingredientsCostPerPizza;
     }
 }
