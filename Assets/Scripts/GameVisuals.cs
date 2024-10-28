@@ -11,6 +11,7 @@ using TMPro;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 public class GameVisuals : MonoBehaviour
 {
@@ -23,13 +24,19 @@ public class GameVisuals : MonoBehaviour
     // Declaração de Variáveis
     //===============================================================================================
     private int     _soldPizzas;
+
     private float   _pizzaWait;
     private float   _customerWait;
+
     private float   _elapsedTime;
     private float   _startTime;
     private float   _speed;
+
     private Color32 _green;
     private Color32 _blue;
+
+    private float   _menuMusicBaseVolume = 0.6f;
+    private bool    _isMusicOff;
 
     [SerializeField] private TMP_Text    _dayText;
     [SerializeField] private TMP_Text    _hourText;
@@ -40,12 +47,35 @@ public class GameVisuals : MonoBehaviour
     [SerializeField] private Button      _speed2X;
     [SerializeField] private Button      _speed5X;
     [SerializeField] private AudioSource _pizzaSoldSound;
+    [SerializeField] private AudioSource _velocityChangeSound;
+    [SerializeField] private AudioSource _toggleMusicSound;
+    [SerializeField] private AudioSource _menuMusic;
+    [SerializeField] private Image       _iconMusicOn;
+    [SerializeField] private Image       _iconMusicOff;
+    [SerializeField] private GameObject  _customerPrefab;
+                     private GameObject  _activeCustomer;
+                     private Animator    _animator;
 
     //===============================================================================================
     // Métodos
     //===============================================================================================
+    private void Load() {   
+        _isMusicOff = PlayerPrefs.GetInt("isMusicOff") == 1;
+    }
+
+    private void Save() {
+        PlayerPrefs.SetInt("isMusicOff", _isMusicOff ? 1 : 0);
+    }
+
     void Start()
     {
+        if (!PlayerPrefs.HasKey("isMusicOff")) {
+            PlayerPrefs.SetInt("isMusicOff", 0);
+        }
+        Load();
+        UpdateMusicIcon();
+        _menuMusic.volume = (_isMusicOff ? 0 : 1) * _menuMusicBaseVolume;
+
         _speed = 1;
         Time.timeScale = _baseSpeed;
         _startTime = Time.time;
@@ -57,6 +87,7 @@ public class GameVisuals : MonoBehaviour
         _customerWait = (float) (60 / GameData.GetCustomerUpgrade());
 
         _soldPizzas = 0;
+        StartCoroutine(SpawnCustomer());
     }
     void Update()
     {
@@ -70,10 +101,20 @@ public class GameVisuals : MonoBehaviour
         if (_customerWait >= 0)
             _customerWait -= Time.deltaTime;
 
+    
+        if (_activeCustomer) {
+            if (_customerWait >= 10 / GameData.GetCustomerUpgrade() && _customerWait <= 30 / GameData.GetCustomerUpgrade())
+                _animator.SetFloat("speed", 0);
+            else
+                _animator.SetFloat("speed", 0.1f); 
+        }
+
         if (_pizzaWait <= 0 && _customerWait <= 0) {
+            StartCoroutine(DestroyCustomer());
             GameRules.BakePizza();
             _soldPizzas++;
             PlaySound();
+            StartCoroutine(SpawnCustomer());
             _pizzaWait = (float) (60 / GameData.GetOvenUpgrade());
             _customerWait = (float) (60 / GameData.GetCustomerUpgrade());
         }
@@ -117,20 +158,55 @@ public class GameVisuals : MonoBehaviour
             break;
         }
     }
+
+    private IEnumerator SpawnCustomer() {
+        yield return new WaitForSeconds((float) (10 / GameData.GetCustomerUpgrade()));
+        _activeCustomer = Instantiate(_customerPrefab) as GameObject;
+        _animator = _activeCustomer.GetComponent<Animator>();
+        _animator.SetFloat("speed", 0.1f);
+    }
+    private IEnumerator DestroyCustomer() {
+        yield return new WaitForSeconds((float) (5 / GameData.GetCustomerUpgrade()));
+        Destroy(_activeCustomer);
+    }
+
     private void PlaySound() {
         _pizzaSoldSound.Play();
     }
 
     public void ClickSpeed1X() {
+        _velocityChangeSound.Play();
         _speed = 1;
     }
     public void ClickSpeed2X() {
+        _velocityChangeSound.Play();
         _speed = 2;
     }
     public void ClickSpeed5X() {
+        _velocityChangeSound.Play();
         _speed = 5;
     }
     public void ClickSkip() {
+        _velocityChangeSound.Play();
+        StartCoroutine(WaitForVelocityChangeSound());
+    }
+    public void ClickToggleMusic() {
+        _isMusicOff = !_isMusicOff;
+        _menuMusic.volume = (_isMusicOff ? 0 : 1) * _menuMusicBaseVolume;
+        UpdateMusicIcon();
+        Save();
+        _toggleMusicSound.Play();
+    }
+
+    private void UpdateMusicIcon() {
+        _iconMusicOn.enabled = !_isMusicOff;
+        _iconMusicOff.enabled = _isMusicOff;
+    }
+
+    private IEnumerator WaitForVelocityChangeSound() {
+        while (_velocityChangeSound.isPlaying) {
+            yield return null;
+        }
         GameRules.BakeBatch(8 - (_elapsedTime / 60));
         SceneManager.LoadScene("UI Scene");
     }

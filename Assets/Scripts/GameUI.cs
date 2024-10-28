@@ -47,6 +47,32 @@ public class GameUI : MonoBehaviour
     [SerializeField] private AudioSource _buyIngridientSound;
     [SerializeField] private AudioSource _buyUpgradeSound;
     [SerializeField] private AudioSource _startNextDaySound;
+    [SerializeField] private AudioSource _toggleMusicSound;
+    [SerializeField] private AudioSource _menuMusic;
+
+    [SerializeField] private Image       _iconMusicOn;
+    [SerializeField] private Image       _iconMusicOff;
+
+                     private float       _menuMusicBaseVolume = 0.3f;
+                     private bool        _isMusicOff;
+
+    private void Load() {   
+        _isMusicOff = PlayerPrefs.GetInt("isMusicOff") == 1;
+    }
+
+    private void Save() {
+        PlayerPrefs.SetInt("isMusicOff", _isMusicOff ? 1 : 0);
+    }
+
+    void Start()
+    {
+        if (!PlayerPrefs.HasKey("isMusicOff")) {
+            PlayerPrefs.SetInt("isMusicOff", 0);
+        }
+        Load();
+        UpdateMusicIcon();
+        _menuMusic.volume = (_isMusicOff ? 0 : 1) * _menuMusicBaseVolume;
+    }
 
     // Update is called once per frame
     void Update()
@@ -127,6 +153,18 @@ public class GameUI : MonoBehaviour
     public void ClickStartNextDay() {
         _startNextDaySound.Play();
         StartCoroutine(WaitForStartNextDaySound());
+    }
+    public void ClickToggleMusic() {
+        _isMusicOff = !_isMusicOff;
+        _menuMusic.volume = (_isMusicOff ? 0 : 1) * _menuMusicBaseVolume;
+        UpdateMusicIcon();
+        Save();
+        _toggleMusicSound.Play();
+    }
+
+    private void UpdateMusicIcon() {
+        _iconMusicOn.enabled = !_isMusicOff;
+        _iconMusicOff.enabled = _isMusicOff;
     }
 
     private IEnumerator WaitForStartNextDaySound() {
