@@ -6030,6 +6030,7 @@ MonoBehaviour:
   _moneyText: {fileID: 1160846130}
   _ingridientText: {fileID: 761010290}
   _pizzaText: {fileID: 1638770949}
+  _summaryTitleText: {fileID: 1384882528}
   _usedIngridientsText: {fileID: 1856312336}
   _pizzasSoldText: {fileID: 1843106891}
   _moneySpendText: {fileID: 561041985}

@@ -55,6 +55,7 @@ public class GameVisuals : MonoBehaviour
     [SerializeField] private TMP_Text    _moneyText;
     [SerializeField] private TMP_Text    _ingridientText;
     [SerializeField] private TMP_Text    _pizzaText;
+    [SerializeField] private TMP_Text    _summaryTitleText;
     [SerializeField] private TMP_Text    _usedIngridientsText;
     [SerializeField] private TMP_Text    _pizzasSoldText;
     [SerializeField] private TMP_Text    _moneySpendText;
@@ -187,12 +188,19 @@ public class GameVisuals : MonoBehaviour
     }
     private void DrawSummary() {
         double _profit = Math.Round(_moneyEarned - GameRules.moneySpend);
+        _summaryTitleText.text = "Resumo do Dia " + GameData.day;
         _usedIngridientsText.text = (int)_usedIngridients + " Ingridientes usados";
         _pizzasSoldText.text = _soldPizzas + " Pizzas vendidas";
         _moneySpendText.text = GameRules.moneySpend + " $ gastos";
         _moneyEarnedText.text = Math.Round(_moneyEarned, 2) + " $ recebidos";
 
-        _profitText.color = (_profit > 0) ? _green : _red;
+        if (_profit == 0)
+            _profitText.color = Color.gray;
+        if (_profit > 0)
+            _profitText.color = _green;
+        if (_profit < 0) {
+            _profitText.color = _red;
+        }
         _profitText.text = Math.Round(_moneyEarned - GameRules.moneySpend, 2) + " $";
     }
 
