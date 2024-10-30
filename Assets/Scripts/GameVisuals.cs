@@ -59,6 +59,7 @@ public class GameVisuals : MonoBehaviour
     [SerializeField] private AudioSource _pizzaSoldSound;
     [SerializeField] private AudioSource _velocityChangeSound;
     [SerializeField] private AudioSource _toggleMusicSound;
+    [SerializeField] private AudioSource _finishDaySound;
     [SerializeField] private AudioSource _menuMusic;
     [SerializeField] private Image       _iconMusicOn;
     [SerializeField] private Image       _iconMusicOff;
@@ -243,7 +244,8 @@ public class GameVisuals : MonoBehaviour
         _toggleMusicSound.Play();
     }
     public void ClickContinue() {
-        SceneManager.LoadScene("UI Scene");
+        _finishDaySound.Play();
+        StartCoroutine(WaitForFinishDaySound());
     }
 
     private void UpdateMusicIcon() {
@@ -251,10 +253,10 @@ public class GameVisuals : MonoBehaviour
         _iconMusicOff.enabled = _isMusicOff;
     }
 
-    private IEnumerator WaitForVelocityChangeSound() {
-        while (_velocityChangeSound.isPlaying) {
+    private IEnumerator WaitForFinishDaySound() {
+        while (_finishDaySound.isPlaying) {
             yield return null;
         }
-        _isDayRunning = false;
+        SceneManager.LoadScene("UI Scene");
     }
 }

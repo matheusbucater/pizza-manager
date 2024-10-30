@@ -1112,7 +1112,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: f125598a529c884caabfcaf9d1dcde05, type: 3}
+  m_Texture: {fileID: 2800000, guid: 9bd79a262322a010ab9fe28706225acf, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -3788,6 +3788,7 @@ MonoBehaviour:
   _pizzaSoldSound: {fileID: 1755271205}
   _velocityChangeSound: {fileID: 889529357}
   _toggleMusicSound: {fileID: 1656716004}
+  _finishDaySound: {fileID: 2104104644}
   _menuMusic: {fileID: 911458277}
   _iconMusicOn: {fileID: 1906356586}
   _iconMusicOff: {fileID: 2119051379}
