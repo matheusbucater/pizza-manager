@@ -24,6 +24,8 @@ public class GameVisuals : MonoBehaviour
     // Declaração de Variáveis
     //===============================================================================================
     private int     _soldPizzas;
+    private double  _usedIngridients;
+    private double  _moneyEarned;
 
     private float   _pizzaWait;
     private float   _customerWait;
@@ -34,15 +36,23 @@ public class GameVisuals : MonoBehaviour
 
     private Color32 _green;
     private Color32 _blue;
+    private Color32 _red;
 
     private float   _menuMusicBaseVolume = 0.6f;
     private bool    _isMusicOff;
+
+    private bool    _isDayRunning;
 
     [SerializeField] private TMP_Text    _dayText;
     [SerializeField] private TMP_Text    _hourText;
     [SerializeField] private TMP_Text    _moneyText;
     [SerializeField] private TMP_Text    _ingridientText;
     [SerializeField] private TMP_Text    _pizzaText;
+    [SerializeField] private TMP_Text    _usedIngridientsText;
+    [SerializeField] private TMP_Text    _pizzasSoldText;
+    [SerializeField] private TMP_Text    _moneySpendText;
+    [SerializeField] private TMP_Text    _moneyEarnedText;
+    [SerializeField] private TMP_Text    _profitText;
     [SerializeField] private Button      _speed1X;
     [SerializeField] private Button      _speed2X;
     [SerializeField] private Button      _speed5X;
@@ -52,6 +62,7 @@ public class GameVisuals : MonoBehaviour
     [SerializeField] private AudioSource _menuMusic;
     [SerializeField] private Image       _iconMusicOn;
     [SerializeField] private Image       _iconMusicOff;
+    [SerializeField] private Canvas      _summaryCanvas;
     [SerializeField] private GameObject  _customerPrefab;
                      private GameObject  _activeCustomer;
                      private Animator    _animator;
@@ -82,50 +93,80 @@ public class GameVisuals : MonoBehaviour
 
         _blue = new Color32(26, 0, 132, 255);
         _green = new Color32(27, 141, 0, 255);
+        _red = new Color32(255, 88, 88, 255);
 
         _pizzaWait = (float) (60 / GameData.GetOvenUpgrade());
         _customerWait = (float) (60 / GameData.GetCustomerUpgrade());
 
+        _isDayRunning = true;
+        _summaryCanvas.enabled = false;
+
         _soldPizzas = 0;
+        _usedIngridients = 0;
+        _moneyEarned = 0;
+
         StartCoroutine(SpawnCustomer());
     }
     void Update()
     {
-        _elapsedTime = Math.Abs(Time.time - _startTime);
-        if (_elapsedTime / 60 > 8 || GameData.ingredients < GameData.ingredientsCostPerPizza) {
-            SceneManager.LoadScene("UI Scene");
+        if (_isDayRunning) {
+            _elapsedTime = Math.Abs(Time.time - _startTime);
+            if (_elapsedTime / 60 > 8 || GameData.ingredients < GameData.ingredientsCostPerPizza) {
+                // SceneManager.LoadScene("UI Scene");
+                _isDayRunning = false;
+            }
+
+            if (_pizzaWait >= 0)
+                _pizzaWait -= Time.deltaTime;
+            if (_customerWait >= 0)
+                _customerWait -= Time.deltaTime;
+
+
+            if (_activeCustomer) {
+                if (_customerWait >= 10 / GameData.GetCustomerUpgrade() && _customerWait <= 30 / GameData.GetCustomerUpgrade())
+                    _animator.SetFloat("speed", 0);
+                else
+                    _animator.SetFloat("speed", 0.1f); 
+            }
+
+            if (_pizzaWait <= 0 && _customerWait <= 0) {
+                StartCoroutine(DestroyCustomer());
+                GameRules.BakePizza();
+                _soldPizzas++;
+                _usedIngridients += GameData.ingredientsCostPerPizza;
+                _moneyEarned += GameData.GetPizzaUpgrade();
+                PlaySound();
+                StartCoroutine(SpawnCustomer());
+                _pizzaWait = (float) (60 / GameData.GetOvenUpgrade());
+                _customerWait = (float) (60 / GameData.GetCustomerUpgrade());
+            }
+
+            Time.timeScale = _speed * _baseSpeed;
+            DrawHUD();
         }
-
-        if (_pizzaWait >= 0)
-            _pizzaWait -= Time.deltaTime;
-        if (_customerWait >= 0)
-            _customerWait -= Time.deltaTime;
-
-    
-        if (_activeCustomer) {
-            if (_customerWait >= 10 / GameData.GetCustomerUpgrade() && _customerWait <= 30 / GameData.GetCustomerUpgrade())
-                _animator.SetFloat("speed", 0);
-            else
-                _animator.SetFloat("speed", 0.1f); 
+        else {
+            _summaryCanvas.enabled = true;
+            DrawSummary();
         }
+    }
 
-        if (_pizzaWait <= 0 && _customerWait <= 0) {
-            StartCoroutine(DestroyCustomer());
-            GameRules.BakePizza();
-            _soldPizzas++;
-            PlaySound();
-            StartCoroutine(SpawnCustomer());
-            _pizzaWait = (float) (60 / GameData.GetOvenUpgrade());
-            _customerWait = (float) (60 / GameData.GetCustomerUpgrade());
-        }
-
-        Time.timeScale = _speed * _baseSpeed;
-        DrawHUD();
+    void OnDisable() {
+        GameRules.moneySpend = 0;
     }
 
     private void DrawHUD() {
         DrawText();
         DrawButton();
+    }
+    private void DrawSummary() {
+        double _profit = Math.Round(_moneyEarned - GameRules.moneySpend);
+        _usedIngridientsText.text = (int)_usedIngridients + " Ingridientes usados";
+        _pizzasSoldText.text = _soldPizzas + " Pizzas vendidas";
+        _moneySpendText.text = GameRules.moneySpend + " $ gastos";
+        _moneyEarnedText.text = Math.Round(_moneyEarned, 2) + " $ recebidos";
+
+        _profitText.color = (_profit > 0) ? _green : _red;
+        _profitText.text = Math.Round(_moneyEarned - GameRules.moneySpend, 2) + " $";
     }
 
     private void DrawText() {
@@ -188,7 +229,11 @@ public class GameVisuals : MonoBehaviour
     }
     public void ClickSkip() {
         _velocityChangeSound.Play();
-        StartCoroutine(WaitForVelocityChangeSound());
+        BatchSummary _summary = GameRules.BakeBatch(8 - (_elapsedTime / 60));
+        _soldPizzas += _summary.PizzasMade;
+        _usedIngridients += _summary.IngridientsSpend;
+        _moneyEarned += _summary.MoneyEarned;
+        _isDayRunning = false;
     }
     public void ClickToggleMusic() {
         _isMusicOff = !_isMusicOff;
@@ -196,6 +241,9 @@ public class GameVisuals : MonoBehaviour
         UpdateMusicIcon();
         Save();
         _toggleMusicSound.Play();
+    }
+    public void ClickContinue() {
+        SceneManager.LoadScene("UI Scene");
     }
 
     private void UpdateMusicIcon() {
@@ -207,7 +255,6 @@ public class GameVisuals : MonoBehaviour
         while (_velocityChangeSound.isPlaying) {
             yield return null;
         }
-        GameRules.BakeBatch(8 - (_elapsedTime / 60));
-        SceneManager.LoadScene("UI Scene");
+        _isDayRunning = false;
     }
 }
