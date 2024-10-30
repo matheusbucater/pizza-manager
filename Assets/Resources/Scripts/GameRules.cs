@@ -51,7 +51,7 @@ public class GameRules : MonoBehaviour
     }
     public static void StartNextDay() {
         GameData.day++;
-        SceneManager.LoadScene("pizzaria");
+        SceneManager.LoadScene("Main Scene");
     }
     public static void BakePizza() {
         GameData.money += GameData.GetPizzaUpgrade();
