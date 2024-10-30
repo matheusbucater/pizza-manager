@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menu Scene.unity
+    guid: 0029e5c24d0ff17b18bbae8531243619
+  - enabled: 1
     path: Assets/Scenes/UI Scene.unity
     guid: 920ba886abbd4b059aa8a807ff885bd6
+  - enabled: 1
+    path: Assets/Scenes/pizzaria.unity
+    guid: 7c76456d6d7696748a61a4726677a6ea
   - enabled: 1
     path: Assets/Scenes/Main Scene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
