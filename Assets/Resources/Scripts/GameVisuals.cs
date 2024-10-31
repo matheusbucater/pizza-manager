@@ -36,6 +36,8 @@ public class GameVisuals : MonoBehaviour
     private float   _startTime;
     private float   _speed;
 
+    private float   _customerSpeed;
+
     private Color32 _green;
     private Color32 _blue;
     private Color32 _red;
@@ -47,8 +49,6 @@ public class GameVisuals : MonoBehaviour
     private bool    _hasWaitedInLine;
 
     private bool    _isDayRunning;
-
-    private IEnumerator _spawnCustomerCoroutine;
 
     [SerializeField] private TMP_Text    _dayText;
     [SerializeField] private TMP_Text    _hourText;
@@ -89,7 +89,7 @@ public class GameVisuals : MonoBehaviour
 
     void Start()
     {
-        _spawnCustomerCoroutine = SpawnCustomer();
+        _customerSpeed = -0.22f;
 
         _isWaitingInLine = false;
         _hasWaitedInLine = false;
@@ -119,7 +119,7 @@ public class GameVisuals : MonoBehaviour
         _usedIngridients = 0;
         _moneyEarned = 0;
 
-        StartCoroutine(_spawnCustomerCoroutine);
+        SpawnCustomer();
     }
     void Update()
     {
@@ -137,42 +137,57 @@ public class GameVisuals : MonoBehaviour
 
 
             if (_activeCustomer) {
-                if (_customerWait >= 0 && _customerWait <= 10 / GameData.GetCustomerUpgrade()) {
+                if (_activeCustomer.transform.position.x <= 9
+                        && _activeCustomer.transform.position.z <= 16
+                        && Math.Max(_customerWait, _pizzaWait) >= 0
+                   ) {
                     _animator.SetFloat("speed", 0);
                     _isWaitingInLine = true;
-                }
-                else {
-                    _animator.SetFloat("speed", 0.1f); 
+                    _customerSpeed = 0;
+                } else {
+                    if(_activeCustomer.transform.position.x >= 19
+                        && _activeCustomer.transform.position.z >= 26
+                      ) {
+                        Destroy(_activeCustomer);
+                        SpawnCustomer();
+                        goto EndOfActiveCustomer;
+                    }
+                    _animator.SetFloat("speed", 0.1f);
                     if (_isWaitingInLine) {
                         _activeCustomer.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0, 40, 0));
                         _hasWaitedInLine = true;
                         _isWaitingInLine = false;
                     }
                     if (_hasWaitedInLine)
-                        _activeCustomer.gameObject.transform.position += Time.deltaTime * new Vector3(0.45f,0,0.45f);
-                    else
-                        _activeCustomer.gameObject.transform.position += Time.deltaTime * new Vector3(-0.22f,0,-0.22f);
+                        _customerSpeed = 0.7f * (float) Math.Min(
+                                GameData.GetCustomerUpgrade(),
+                                GameData.GetOvenUpgrade()
+                                );
+                    else 
+                        _customerSpeed = -0.4f * (float) Math.Min(
+                                GameData.GetCustomerUpgrade(),
+                                GameData.GetOvenUpgrade()
+                                );
                 }
+                _activeCustomer.transform.position += _customerSpeed * Time.deltaTime * new Vector3(1,0,1);
             }
+EndOfActiveCustomer:
 
             if (_pizzaWait <= 0 && _customerWait <= 0) {
-                StartCoroutine(DestroyCustomer());
                 GameRules.BakePizza();
                 _soldPizzas++;
                 _usedIngridients += GameData.ingredientsCostPerPizza;
                 _moneyEarned += GameData.GetPizzaUpgrade();
                 PlaySound();
-                StartCoroutine(SpawnCustomer());
                 _pizzaWait = (float) (60 / GameData.GetOvenUpgrade());
                 _customerWait = (float) (60 / GameData.GetCustomerUpgrade());
             }
 
             Time.timeScale = _speed * _baseSpeed;
             DrawHUD();
-        }
-        else {
-            StopCoroutine(_spawnCustomerCoroutine);
-            StartCoroutine(DestroyCustomer());
+
+        } else {
+            Destroy(_activeCustomer);
             _summaryCanvas.enabled = true;
             DrawSummary();
         }
@@ -235,25 +250,6 @@ public class GameVisuals : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnCustomer() {
-        yield return new WaitForSeconds((float) (20 / GameData.GetCustomerUpgrade()));
-
-        _hasWaitedInLine = false;
-        _activeCustomer = Instantiate(
-            _customerPrefab,
-            _customerInitialPosition,
-            _customerInitialRotation
-        ) as GameObject;
-        _activeCustomer.gameObject.transform.localScale = new Vector3(0.8f,0.8f,0.8f);
-
-        _animator = _activeCustomer.GetComponent<Animator>();
-        _animator.SetFloat("speed", 0.1f);
-    }
-    private IEnumerator DestroyCustomer() {
-        yield return new WaitForSeconds((float) (15 / GameData.GetCustomerUpgrade()));
-        Destroy(_activeCustomer);
-    }
-
     private void PlaySound() {
         _pizzaSoldSound.Play();
     }
@@ -288,6 +284,19 @@ public class GameVisuals : MonoBehaviour
     public void ClickContinue() {
         _finishDaySound.Play();
         StartCoroutine(WaitForFinishDaySound());
+    }
+
+    private void SpawnCustomer() {
+        _hasWaitedInLine = false;
+        _activeCustomer = Instantiate(
+                _customerPrefab,
+                _customerInitialPosition,
+                _customerInitialRotation
+                ) as GameObject;
+        _activeCustomer.gameObject.transform.localScale = new Vector3(0.8f,0.8f,0.8f);
+
+        _animator = _activeCustomer.GetComponent<Animator>();
+        _animator.SetFloat("speed", 0.1f);
     }
 
     private void UpdateMusicIcon() {

@@ -14,16 +14,16 @@ public class GameData
     // Declaração de Constantes
     //===============================================================================================================  
     private const double _ovenUpgradeBase        = 0.75;
-    private const double _ovenUpgradeRate        = 1.5;
-    private const double _ovenCostBase           = 30;
-    private const double _ovenCostRate           = 1.02;
+    private const double _ovenUpgradeRate        = 1.2;
+    private const double _ovenCostBase           = 32;
+    private const double _ovenCostRate           = 1.01;
 
     private const double _customerUpgradeBase    = 0.625;
     private const double _customerUpgradeRate    = 1.1;
-    private const double _customerCostBase       = 35;
-    private const double _customerCostRate       = 1.01;
+    private const double _customerCostBase       = 30;
+    private const double _customerCostRate       = 1.02;
 
-    private const double _pizzaUpgradeBase       = 9;
+    private const double _pizzaUpgradeBase       = 12;
     private const double _pizzaUpgradeRate       = 15;
     private const double _pizzaCostBase          = 40;
     private const double _pizzaCostRate          = 1.11;
