@@ -54,7 +54,8 @@ public class GameMenu : MonoBehaviour
 
     public void ClickPlay() {
         _playSound.Play();
-        _menuMusic.volume = 0.3f * _menuMusicBaseVolume;
+        if (!_isMusicOff)
+            _menuMusic.volume = 0.3f * _menuMusicBaseVolume;
         _introCanvas.enabled = true;
         StartCoroutine(_typingCoroutine);
     }
