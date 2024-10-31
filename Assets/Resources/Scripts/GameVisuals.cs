@@ -19,7 +19,7 @@ public class GameVisuals : MonoBehaviour
     // Declaração de Constantes
     //===============================================================================================
     private const float      _baseSpeed = 10f;
-    private       Vector3    _customerInitialPosition = new(14,0,23);
+    private       Vector3    _customerInitialPosition = new(18,0,25);
     private       Quaternion _customerInitialRotation = Quaternion.Euler(new Vector3(0, 216, 0));
 
     //===============================================================================================
@@ -149,9 +149,9 @@ public class GameVisuals : MonoBehaviour
                         _isWaitingInLine = false;
                     }
                     if (_hasWaitedInLine)
-                        _activeCustomer.gameObject.transform.position += Time.deltaTime * new Vector3(0.15f,0,0.15f);
+                        _activeCustomer.gameObject.transform.position += Time.deltaTime * new Vector3(0.45f,0,0.45f);
                     else
-                        _activeCustomer.gameObject.transform.position += Time.deltaTime * new Vector3(-0.15f,0,-0.15f);
+                        _activeCustomer.gameObject.transform.position += Time.deltaTime * new Vector3(-0.22f,0,-0.22f);
                 }
             }
 
@@ -236,7 +236,7 @@ public class GameVisuals : MonoBehaviour
     }
 
     private IEnumerator SpawnCustomer() {
-        yield return new WaitForSeconds((float) (25 / GameData.GetCustomerUpgrade()));
+        yield return new WaitForSeconds((float) (20 / GameData.GetCustomerUpgrade()));
 
         _hasWaitedInLine = false;
         _activeCustomer = Instantiate(
@@ -244,12 +244,13 @@ public class GameVisuals : MonoBehaviour
             _customerInitialPosition,
             _customerInitialRotation
         ) as GameObject;
+        _activeCustomer.gameObject.transform.localScale = new Vector3(0.8f,0.8f,0.8f);
 
         _animator = _activeCustomer.GetComponent<Animator>();
         _animator.SetFloat("speed", 0.1f);
     }
     private IEnumerator DestroyCustomer() {
-        yield return new WaitForSeconds((float) (20 / GameData.GetCustomerUpgrade()));
+        yield return new WaitForSeconds((float) (15 / GameData.GetCustomerUpgrade()));
         Destroy(_activeCustomer);
     }
 
